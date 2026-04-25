@@ -90,14 +90,31 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Password</label>
-                <div class="input-wrapper">
+                <div class="input-wrapper position-relative">
                   <i class="material-symbols-outlined input-icon">lock</i>
                   <input
                     class="form-input"
+                    id="signup-password"
                     placeholder="Enter your password"
                     type="password"
                     required
                   />
+                  <button
+                    type="button"
+                    id="toggle-signup-password"
+                    class="btn btn-sm btn-link p-0 position-absolute end-0 top-50 translate-middle-y me-2"
+                    tabindex="-1"
+                    style="
+                      color: #888;
+                      background: none;
+                      border: none;
+                      outline: none;
+                    "
+                  >
+                    <span class="material-symbols-outlined" id="signup-eye-icon"
+                      >visibility_off</span
+                    >
+                  </button>
                 </div>
               </div>
               <p class="policy">
@@ -127,5 +144,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script src="signup.js"></script>
   </body>
 </html>
