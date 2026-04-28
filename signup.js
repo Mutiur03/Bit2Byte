@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const email = signupForm
         .querySelector('input[type="email"]')
         .value.trim();
-      const password = signupForm.querySelector('input[type="password"]').value;
+      const password = signupForm.querySelector("#signup-password").value;
       const res = await fetch("signup.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

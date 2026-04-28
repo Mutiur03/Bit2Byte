@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await res.json();
       alert(data.message);
       if (data.success) {
-        window.location.href = "index.html";
+        window.location.href = "welcome.html";
       }
     });
   }
