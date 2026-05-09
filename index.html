@@ -1,0 +1,895 @@
+<!doctype html>
+
+<html class="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Bit2Byte | University Software Development Club</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#101319",
+              "surface-container-lowest": "#0b0e13",
+              "primary-container": "#5bc8d4",
+              primary: "#79e4f0",
+              "surface-variant": "#32353b",
+              "surface-tint": "#6ad6e2",
+              "secondary-container": "#274c51",
+              "tertiary-fixed-dim": "#ffb68e",
+              "tertiary-container": "#ffa26d",
+              "on-surface": "#e1e2ea",
+              "on-error": "#690005",
+              "on-error-container": "#ffdad6",
+              "inverse-primary": "#006971",
+              "on-secondary-fixed": "#001f23",
+              "secondary-fixed": "#c2eaef",
+              "on-primary": "#00363b",
+              "tertiary-fixed": "#ffdbca",
+              "error-container": "#93000a",
+              "on-tertiary-container": "#783608",
+              "on-primary-fixed-variant": "#004f56",
+              "surface-container-low": "#191c21",
+              "on-tertiary-fixed": "#331200",
+              outline: "#879394",
+              "surface-container-highest": "#32353b",
+              "on-secondary": "#0d363a",
+              "surface-container-high": "#272a30",
+              "outline-variant": "#3d494a",
+              "secondary-fixed-dim": "#a7cdd2",
+              "primary-fixed": "#88f3ff",
+              secondary: "#a7cdd2",
+              "surface-bright": "#36393f",
+              "on-background": "#e1e2ea",
+              error: "#ffb4ab",
+              "surface-container": "#1d2025",
+              "on-surface-variant": "#bcc9ca",
+              tertiary: "#ffc9ad",
+              background: "#101319",
+              "inverse-surface": "#e1e2ea",
+              "on-primary-container": "#005158",
+              "inverse-on-surface": "#2d3036",
+              "on-tertiary": "#542200",
+              "on-secondary-fixed-variant": "#274c51",
+              "on-tertiary-fixed-variant": "#753406",
+              surface: "#101319",
+              "on-secondary-container": "#96bcc1",
+              "primary-fixed-dim": "#6ad6e2",
+              "on-primary-fixed": "#001f23",
+            },
+            borderRadius: {
+              DEFAULT: "0px",
+              lg: "4px",
+              xl: "8px",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Space Grotesk"],
+              body: ["Inter"],
+              label: ["Space Grotesk"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 300,
+          "GRAD" 0,
+          "opsz" 24;
+        vertical-align: middle;
+      }
+      .grid-pattern {
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(91, 200, 212, 0.05) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(91, 200, 212, 0.05) 1px,
+            transparent 1px
+          );
+        background-size: 64px 64px;
+      }
+      .dot-pattern {
+        background-image: radial-gradient(
+          rgba(91, 200, 212, 0.15) 1px,
+          transparent 1px
+        );
+        background-size: 32px 32px;
+      }
+      .cursor-blink::after {
+        content: "";
+        display: inline-block;
+        width: 0.6em;
+        height: 1.2em;
+        background-color: #79e4f0;
+        margin-left: 0.2em;
+        vertical-align: middle;
+        animation: blink 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+      .text-glow {
+        text-shadow: 0 0 20px rgba(121, 228, 240, 0.3);
+      }
+      .nav-link-hover {
+        position: relative;
+      }
+      .nav-link-hover::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: #79e4f0;
+        transition: width 0.3s ease;
+      }
+      .nav-link-hover:hover::after {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface font-body selection:bg-primary-container/30"
+  >
+    <!-- TopNavBar -->
+    <header
+      class="bg-surface/80 backdrop-blur-xl text-primary font-label text-xs tracking-[0.2em] uppercase fixed w-full top-0 border-b border-white/5 z-[100]"
+    >
+      <nav
+        class="flex justify-between items-center max-w-7xl mx-auto px-8 md:px-12 py-6"
+      >
+        <a href="#home" class="flex items-center gap-3 group">
+          <img
+            src="main-logo.png"
+            alt="Bit2Byte Logo"
+            class="h-7 w-auto transition-transform group-hover:scale-110"
+          />
+          <span class="text-xl font-bold tracking-tighter text-on-surface"
+            >Bit2Byte</span
+          >
+        </a>
+        <div class="hidden md:flex gap-10 items-center">
+          <a
+            class="text-on-surface/50 hover:text-primary transition-colors nav-link-hover"
+            href="#home"
+            >Home</a
+          >
+          <a
+            class="text-on-surface/50 hover:text-primary transition-colors nav-link-hover"
+            href="#about"
+            >About</a
+          >
+          <a
+            class="text-on-surface/50 hover:text-primary transition-colors nav-link-hover"
+            href="#events"
+            >Events</a
+          >
+          <a
+            class="text-on-surface/50 hover:text-primary transition-colors nav-link-hover"
+            href="#projects"
+            >Projects</a
+          >
+          <a
+            class="text-on-surface/50 hover:text-primary transition-colors nav-link-hover"
+            href="#team"
+            >Team</a
+          >
+        </div>
+        <a
+          href="login.html"
+          class="border border-primary/30 text-primary px-6 py-2.5 text-[10px] font-bold hover:bg-primary hover:text-on-primary transition-all duration-500 tracking-[0.3em]"
+        >
+          JOIN_SYSTEM
+        </a>
+      </nav>
+    </header>
+    <main>
+      <!-- Hero Section -->
+      <section
+        class="relative min-h-screen flex flex-col justify-center items-center px-8 text-center overflow-hidden pt-20"
+        id="home"
+      >
+        <div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+        <div class="absolute inset-0 dot-pattern pointer-events-none"></div>
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none"
+        ></div>
+        <div class="relative z-10 max-w-6xl w-full">
+          <div
+            class="inline-flex items-center gap-3 px-4 py-2 border border-primary/10 bg-primary/5 mb-10 animate-pulse"
+          >
+            <span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+            <span
+              class="font-label text-primary tracking-[0.4em] text-[10px] uppercase"
+              >System.Status: Active</span
+            >
+          </div>
+          <h1
+            class="font-headline text-7xl md:text-[10rem] font-bold tracking-[-0.04em] leading-[0.9] text-on-surface mb-8 text-glow"
+          >
+            Bit<span class="text-primary">2</span>Byte
+          </h1>
+          <p
+            class="font-headline text-xl md:text-3xl text-on-surface-variant/80 mb-14 max-w-2xl mx-auto cursor-blink tracking-tight font-light"
+          >
+            Architecting the next generation of digital infrastructure.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-24"
+          >
+            <button
+              class="group relative px-10 py-5 bg-primary text-on-primary font-label font-bold text-xs tracking-[0.3em] overflow-hidden transition-all duration-500 hover:shadow-[0_0_40px_rgba(121,228,240,0.3)]"
+            >
+              <span class="relative z-10">INITIALIZE_EXPLORATION</span>
+              <div
+                class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
+              ></div>
+            </button>
+            <button
+              class="group px-10 py-5 border border-outline-variant/30 text-on-surface/70 font-label font-bold text-xs tracking-[0.3em] hover:border-primary hover:text-primary transition-all duration-500 backdrop-blur-sm"
+            >
+              &gt; VIEW_CHANGELOG
+            </button>
+          </div>
+          <!-- Stats Row -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-0 max-w-4xl mx-auto border border-white/5 bg-surface-container-lowest/50 backdrop-blur-md"
+          >
+            <div
+              class="p-10 border-b md:border-b-0 md:border-r border-white/5 group hover:bg-primary/[0.02] transition-colors"
+            >
+              <div
+                class="font-headline text-5xl font-light text-primary mb-2 transition-transform duration-500 group-hover:scale-110"
+              >
+                500+
+              </div>
+              <div
+                class="font-label text-[10px] tracking-[0.4em] text-on-surface-variant/50 uppercase"
+              >
+                Active_Nodes
+              </div>
+            </div>
+            <div
+              class="p-10 border-b md:border-b-0 md:border-r border-white/5 group hover:bg-primary/[0.02] transition-colors"
+            >
+              <div
+                class="font-headline text-5xl font-light text-primary mb-2 transition-transform duration-500 group-hover:scale-110"
+              >
+                20+
+              </div>
+              <div
+                class="font-label text-[10px] tracking-[0.4em] text-on-surface-variant/50 uppercase"
+              >
+                Protocols_Deployed
+              </div>
+            </div>
+            <div class="p-10 group hover:bg-primary/[0.02] transition-colors">
+              <div
+                class="font-headline text-5xl font-light text-primary mb-2 transition-transform duration-500 group-hover:scale-110"
+              >
+                15+
+              </div>
+              <div
+                class="font-label text-[10px] tracking-[0.4em] text-on-surface-variant/50 uppercase"
+              >
+                Cycles_Quarterly
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce opacity-20"
+        >
+          <span class="material-symbols-outlined text-4xl">expand_more</span>
+        </div>
+      </section>
+      <!-- About Section -->
+      <section class="py-40 px-8 md:px-24 bg-surface-container-low" id="about">
+        <div
+          class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center max-w-7xl mx-auto"
+        >
+          <div>
+            <span
+              class="font-label text-primary text-xs tracking-widest mb-4 block"
+              >// MISSION_STATEMENT</span
+            >
+            <h2
+              class="font-headline text-5xl font-bold mb-10 text-on-surface tracking-tight"
+            >
+              The Core Protocol
+            </h2>
+            <p
+              class="text-on-surface-variant/80 leading-relaxed text-xl mb-10 font-body font-light"
+            >
+              Bit2Byte is the premier software engineering hub on campus. We
+              bridge the gap between academic theory and industry reality. Our
+              environment is designed for those who want to push beyond the
+              syllabus and build production-grade solutions.
+            </p>
+            <div
+              class="flex items-center gap-4 text-primary/60 font-label text-xs tracking-widest bg-surface px-6 py-4 border border-white/5 inline-flex"
+            >
+              <span class="material-symbols-outlined text-lg">code_blocks</span>
+              <span>0x42 0x69 0x74 0x32 0x42 0x79 0x74 0x65</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div
+              class="bg-surface border border-white/5 p-10 group hover:border-primary/50 transition-all duration-500"
+            >
+              <span
+                class="material-symbols-outlined text-primary mb-6 text-3xl"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >terminal</span
+              >
+              <h3
+                class="font-headline font-bold text-on-surface mb-3 tracking-tight"
+              >
+                Hackathons
+              </h3>
+              <p
+                class="text-xs text-on-surface-variant/60 leading-relaxed uppercase tracking-widest"
+              >
+                24-hour sprint sessions building complex systems from scratch.
+              </p>
+            </div>
+            <div
+              class="bg-surface border border-white/5 p-10 group hover:border-primary/50 transition-all duration-500"
+            >
+              <span class="material-symbols-outlined text-primary mb-6 text-3xl"
+                >settings_suggest</span
+              >
+              <h3
+                class="font-headline font-bold text-on-surface mb-3 tracking-tight"
+              >
+                Workshops
+              </h3>
+              <p
+                class="text-xs text-on-surface-variant/60 leading-relaxed uppercase tracking-widest"
+              >
+                Deep dives into modern stacks: Rust, Go, React, and DevOps.
+              </p>
+            </div>
+            <div
+              class="bg-surface border border-white/5 p-10 group hover:border-primary/50 transition-all duration-500"
+            >
+              <span class="material-symbols-outlined text-primary mb-6 text-3xl"
+                >hub</span
+              >
+              <h3
+                class="font-headline font-bold text-on-surface mb-3 tracking-tight"
+              >
+                Open Source
+              </h3>
+              <p
+                class="text-xs text-on-surface-variant/60 leading-relaxed uppercase tracking-widest"
+              >
+                Contributing to global projects and maintaining club libraries.
+              </p>
+            </div>
+            <div
+              class="bg-surface border border-white/5 p-10 group hover:border-primary/50 transition-all duration-500"
+            >
+              <span class="material-symbols-outlined text-primary mb-6 text-3xl"
+                >groups</span
+              >
+              <h3
+                class="font-headline font-bold text-on-surface mb-3 tracking-tight"
+              >
+                Community
+              </h3>
+              <p
+                class="text-xs text-on-surface-variant/60 leading-relaxed uppercase tracking-widest"
+              >
+                A network of 500+ developers sharing knowledge daily.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Events Section -->
+      <section class="py-40 px-8 md:px-24" id="events">
+        <div class="max-w-7xl mx-auto">
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8"
+          >
+            <div>
+              <span
+                class="font-label text-primary text-xs tracking-[0.4em] mb-4 block"
+                >[SCHEDULED_OPERATIONS]</span
+              >
+              <h2
+                class="font-headline text-5xl font-bold text-on-surface tracking-tight"
+              >
+                Events Registry
+              </h2>
+            </div>
+            <button
+              class="text-primary font-label text-xs tracking-widest flex items-center gap-3 hover:translate-x-2 transition-transform uppercase border-b border-primary/20 pb-2"
+            >
+              VIEW_ALL_LOGS
+              <span class="material-symbols-outlined text-sm"
+                >arrow_right_alt</span
+              >
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Event Card 1 -->
+            <div
+              class="group bg-surface-container-low border border-white/5 p-10 transition-all hover:bg-surface-container-high relative overflow-hidden"
+            >
+              <div
+                class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/10 transition-colors"
+              ></div>
+              <div class="flex justify-between items-start mb-8">
+                <span
+                  class="bg-primary/10 text-primary text-[10px] px-3 py-1 font-label tracking-[0.2em] uppercase"
+                  >UPCOMING</span
+                >
+                <span
+                  class="text-on-surface-variant/50 font-label text-[10px] tracking-widest"
+                  >OCT_24_2024</span
+                >
+              </div>
+              <h3
+                class="font-headline text-2xl font-bold text-on-surface mb-6 tracking-tight"
+              >
+                Algorithmic Mastery 2.0
+              </h3>
+              <p
+                class="text-on-surface-variant/70 text-sm mb-10 leading-relaxed"
+              >
+                Prepare for FAANG technical interviews with our competitive
+                programming workshop focused on Dynamic Programming.
+              </p>
+              <div
+                class="flex items-center gap-3 text-on-surface-variant/50 text-[10px] font-label tracking-widest uppercase"
+              >
+                <span class="material-symbols-outlined text-sm text-primary"
+                  >location_on</span
+                >
+                LAB_701_GRID
+              </div>
+            </div>
+            <!-- Event Card 2 -->
+            <div
+              class="group bg-surface-container-low border border-white/5 p-10 transition-all hover:bg-surface-container-high relative overflow-hidden"
+            >
+              <div
+                class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-primary/10 transition-colors"
+              ></div>
+              <div class="flex justify-between items-start mb-8">
+                <span
+                  class="bg-primary/10 text-primary text-[10px] px-3 py-1 font-label tracking-[0.2em] uppercase"
+                  >UPCOMING</span
+                >
+                <span
+                  class="text-on-surface-variant/50 font-label text-[10px] tracking-widest"
+                  >NOV_02_2024</span
+                >
+              </div>
+              <h3
+                class="font-headline text-2xl font-bold text-on-surface mb-6 tracking-tight"
+              >
+                B2B Intra-Hackathon
+              </h3>
+              <p
+                class="text-on-surface-variant/70 text-sm mb-10 leading-relaxed"
+              >
+                A 12-hour internal sprint to build internal tooling for the
+                university administration system.
+              </p>
+              <div
+                class="flex items-center gap-3 text-on-surface-variant/50 text-[10px] font-label tracking-widest uppercase"
+              >
+                <span class="material-symbols-outlined text-sm text-primary"
+                  >location_on</span
+                >
+                MAIN_AUDITORIUM
+              </div>
+            </div>
+            <!-- Event Card 3 -->
+            <div
+              class="group bg-surface-container-low border border-white/5 p-10 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all relative overflow-hidden"
+            >
+              <div class="flex justify-between items-start mb-8">
+                <span
+                  class="bg-outline-variant/20 text-on-surface-variant text-[10px] px-3 py-1 font-label tracking-[0.2em] uppercase"
+                  >COMPLETED</span
+                >
+                <span
+                  class="text-on-surface-variant/50 font-label text-[10px] tracking-widest"
+                  >SEP_15_2024</span
+                >
+              </div>
+              <h3
+                class="font-headline text-2xl font-bold text-on-surface mb-6 tracking-tight"
+              >
+                Rust For Beginners
+              </h3>
+              <p
+                class="text-on-surface-variant/70 text-sm mb-10 leading-relaxed"
+              >
+                Introduction to memory safety, ownership, and systems
+                programming using the Rust language.
+              </p>
+              <div
+                class="flex items-center gap-3 text-on-surface-variant/50 text-[10px] font-label tracking-widest uppercase"
+              >
+                <span class="material-symbols-outlined text-sm">history</span>
+                ARCHIVED_SESSION
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Projects Section -->
+      <section
+        class="py-40 px-8 md:px-24 bg-surface-container-lowest"
+        id="projects"
+      >
+        <div class="max-w-7xl mx-auto">
+          <div class="mb-20">
+            <span
+              class="font-label text-primary text-xs tracking-[0.4em] mb-4 block"
+              >// SOURCE_REPOSITORIES</span
+            >
+            <h2
+              class="font-headline text-5xl font-bold text-on-surface tracking-tight"
+            >
+              Club Projects
+            </h2>
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Project 1 -->
+            <div
+              class="group bg-surface p-12 border border-white/5 hover:border-primary/30 transition-all relative"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <h3
+                  class="font-headline text-3xl font-bold text-primary tracking-tighter"
+                >
+                  NeuralLink_OS
+                </h3>
+                <div
+                  class="flex items-center gap-2 text-on-surface-variant/50 font-label text-[10px] tracking-widest uppercase"
+                >
+                  <span class="material-symbols-outlined text-sm text-primary"
+                    >star</span
+                  >
+                  128
+                </div>
+              </div>
+              <p
+                class="text-on-surface-variant/80 text-lg mb-10 font-light leading-relaxed"
+              >
+                A lightweight operating system kernel designed for RISC-V
+                architecture experimental neural processing units.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <span
+                  class="bg-white/5 border border-white/5 text-primary text-[10px] px-4 py-1.5 font-label tracking-widest uppercase"
+                  >Rust</span
+                >
+                <span
+                  class="bg-white/5 border border-white/5 text-primary text-[10px] px-4 py-1.5 font-label tracking-widest uppercase"
+                  >WebAssembly</span
+                >
+                <span
+                  class="bg-white/5 border border-white/5 text-primary text-[10px] px-4 py-1.5 font-label tracking-widest uppercase"
+                  >C++</span
+                >
+              </div>
+              <div
+                class="absolute bottom-12 right-12 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <span class="material-symbols-outlined text-primary text-2xl"
+                  >arrow_outward</span
+                >
+              </div>
+            </div>
+            <!-- Project 2 -->
+            <div
+              class="group bg-surface p-12 border border-white/5 hover:border-primary/30 transition-all relative"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <h3
+                  class="font-headline text-3xl font-bold text-primary tracking-tighter"
+                >
+                  Portal_Auth
+                </h3>
+                <div
+                  class="flex items-center gap-2 text-on-surface-variant/50 font-label text-[10px] tracking-widest uppercase"
+                >
+                  <span class="material-symbols-outlined text-sm text-primary"
+                    >star</span
+                  >
+                  84
+                </div>
+              </div>
+              <p
+                class="text-on-surface-variant/80 text-lg mb-10 font-light leading-relaxed"
+              >
+                Unified authentication middleware providing
+                biometrics-as-a-service for university internal applications.
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <span
+                  class="bg-white/5 border border-white/5 text-primary text-[10px] px-4 py-1.5 font-label tracking-widest uppercase"
+                  >Go</span
+                >
+                <span
+                  class="bg-white/5 border border-white/5 text-primary text-[10px] px-4 py-1.5 font-label tracking-widest uppercase"
+                  >gRPC</span
+                >
+                <span
+                  class="bg-white/5 border border-white/5 text-primary text-[10px] px-4 py-1.5 font-label tracking-widest uppercase"
+                  >Docker</span
+                >
+              </div>
+              <div
+                class="absolute bottom-12 right-12 opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <span class="material-symbols-outlined text-primary text-2xl"
+                  >arrow_outward</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Team Section -->
+      <section
+        class="py-40 px-8 md:px-24 bg-surface border-t border-outline-variant/10"
+        id="team"
+      >
+        <div class="max-w-7xl mx-auto">
+          <div class="mb-16">
+            <span
+              class="font-label text-primary text-xs tracking-[0.4em] mb-4 block"
+              >// SYSTEM_ARCHITECTS</span
+            >
+            <h2
+              class="font-headline text-5xl font-bold text-on-surface tracking-tight"
+            >
+              Core Contributors
+            </h2>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Architect 1 -->
+            <div class="group relative">
+              <div
+                class="aspect-square relative overflow-hidden bg-surface-container-high border border-outline-variant/30 mb-6"
+              >
+                <img
+                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 scale-110 group-hover:scale-100"
+                  data-alt="Close-up portrait of a tech professional in a dark studio setting with cold blue rim lighting and digital UI overlay reflections"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDI-2sxDXr1Ad85ISsJCzUIbO7zCvMbcySIUliBzWkKmsa14b4W219kM-UH6r9r8BgJt1NHcSd9a-Mi_Xzb_ZCduG_MTmGMLakEjZ6xeeonXwPsgI4uEtSJFSoGDFsKE61WCnHmHSV2GrVjW4Zs61i-lmSkpl2BqeR4hqTztM_ob43L9BPhLbDs1q4mj0vnMDuYgIgCsGuON24T3b0RldJPKuQ3UFukxBB1op79dq748NKcm1tBYPoZ5lqsyvvxr7chQMsnF8q0b6U"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"
+                ></div>
+                <div
+                  class="absolute bottom-4 left-4 font-label text-[0.6rem] bg-primary text-on-primary px-2 py-0.5 uppercase tracking-widest"
+                >
+                  Clearance_L5
+                </div>
+              </div>
+              <h4 class="font-headline text-2xl font-bold text-on-surface mb-1">
+                Dr. Aris Thorne
+              </h4>
+              <div
+                class="font-label text-primary text-[0.7rem] uppercase tracking-widest mb-3"
+              >
+                // FOUNDER_CHIEF_ARCHITECT
+              </div>
+              <div class="flex gap-3">
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >terminal</span
+                >
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >code_blocks</span
+                >
+              </div>
+            </div>
+            <!-- Architect 2 -->
+            <div class="group relative">
+              <div
+                class="aspect-square relative overflow-hidden bg-surface-container-high border border-outline-variant/30 mb-6"
+              >
+                <img
+                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 scale-110 group-hover:scale-100"
+                  data-alt="Portrait of a female cybersecurity expert in a high-tech lab environment with subtle blue lighting and clean minimalist aesthetic"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5VJFqIbpfcIRRKsGYVPQ6TTuSNJxUzG5cPH9nTgDBYquKlvKCVhNKxKZqmExXdqQlcWm9Hj7FePGnNPEp6-VfqgK5XbustrLvYkGCU-cj4xuaup7dCgY5yxLKoW34TCql6wmi4u3dENDqjtbpPVScL5HaRoM4IuRfRiMo-yG50Wo7CKpQAvlhHeaiXjFyneDGluw01ysv4s0KCCUEa2iXq-0vODAhxeGLRFQyfxZGstBffBsAPsF1TGoLhsg0Ad0buWWUoXikT-E"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"
+                ></div>
+                <div
+                  class="absolute bottom-4 left-4 font-label text-[0.6rem] bg-primary text-on-primary px-2 py-0.5 uppercase tracking-widest"
+                >
+                  Clearance_L4
+                </div>
+              </div>
+              <h4
+                class="font-headline text-2xl font-bold text-on-surface mb-1"
+                id=""
+              >
+                Mira Kovalent
+              </h4>
+              <div
+                class="font-label text-primary text-[0.7rem] uppercase tracking-widest mb-3"
+              >
+                // PROTOCOL_SECURITY_LEAD
+              </div>
+              <div class="flex gap-3">
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >security</span
+                >
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >fingerprint</span
+                >
+              </div>
+            </div>
+            <!-- Architect 3 -->
+            <div class="group relative">
+              <div
+                class="aspect-square relative overflow-hidden bg-surface-container-high border border-outline-variant/30 mb-6"
+              >
+                <img
+                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 scale-110 group-hover:scale-100"
+                  data-alt="Portrait of a software engineer with glasses in a dimly lit office space with colorful neon coding monitor light on face"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxkrIaiLDQsoepBQZ88ZA5WCo8bLarjTdy51xjIDkkxPWuLyHTwnOWAplyV7mgk6gifFBkvPhpgXvUM4oWSB9vYAqZMr-4sLIFtXMwdLndnKj1Df5zxxb4QQMsEi3W0XeiugkPcZ5Su7zdnZMckgDQWoVwSuUlKE0E45qQtBuc8vAltXszx5C_4otgxLP_GbOR5u4ESmaZNOLBp-SuXiNtRJOEbIOHmP_pvWTyRG4-Of-ogGXhKmTyymIMd69wUABNktRGu4SsKHk"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"
+                ></div>
+                <div
+                  class="absolute bottom-4 left-4 font-label text-[0.6rem] bg-primary text-on-primary px-2 py-0.5 uppercase tracking-widest"
+                >
+                  Clearance_L4
+                </div>
+              </div>
+              <h4 class="font-headline text-2xl font-bold text-on-surface mb-1">
+                Elias Vance
+              </h4>
+              <div
+                class="font-label text-primary text-[0.7rem] uppercase tracking-widest mb-3"
+              >
+                // INFRASTRUCTURE_DIRECTOR
+              </div>
+              <div class="flex gap-3">
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >cloud_sync</span
+                >
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >storage</span
+                >
+              </div>
+            </div>
+            <!-- Architect 4 -->
+            <div class="group relative">
+              <div
+                class="aspect-square relative overflow-hidden bg-surface-container-high border border-outline-variant/30 mb-6"
+              >
+                <img
+                  class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100 scale-110 group-hover:scale-100"
+                  data-alt="Professional portrait of a data scientist in a workspace with abstract glass reflections and technical atmosphere"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF0IOcfQNzhQxJmSP13JDRXMKvzmYjMKWEKyF9lIUmpHOtZKxWvDxjTAR6d_z_jxq7f7nQluUPkKImI3iyY9dCULA_aqofd-UAydlUNixAyjUIiCfQ3ompq7XYeB19zND8V-d5mXn61ejbES3gAWU8G2xK1uikvw3iz6UJ9zLXR51z5Sg9sXYEOtprqp4ViPeonnlwi9gFxmAEnHzIBVTAi6Tx0hVcLH48TTUNJgUKzIHy-leto-2KfNvXFnpk4dVIgMBI8jCDf_E"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"
+                ></div>
+                <div
+                  class="absolute bottom-4 left-4 font-label text-[0.6rem] bg-primary text-on-primary px-2 py-0.5 uppercase tracking-widest"
+                >
+                  Clearance_L3
+                </div>
+              </div>
+              <h4 class="font-headline text-2xl font-bold text-on-surface mb-1">
+                Lena Sjöberg
+              </h4>
+              <div
+                class="font-label text-primary text-[0.7rem] uppercase tracking-widest mb-3"
+              >
+                // DATA_ENGINEERING_HEAD
+              </div>
+              <div class="flex gap-3">
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >monitoring</span
+                >
+                <span
+                  class="material-symbols-outlined text-outline hover:text-primary transition-colors text-lg cursor-pointer"
+                  >database</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Footer -->
+    <footer
+      class="bg-surface-container-lowest font-label text-[10px] tracking-[0.3em] uppercase flex flex-col md:flex-row justify-between items-center px-12 py-16 w-full text-primary/50 border-t border-white/5"
+    >
+      <div class="mb-10 md:mb-0">
+        <div class="mb-3">
+          <img src="main-logo.png" alt="Bit2Byte Logo" class="h-10 w-auto" />
+        </div>
+        <div class="text-on-surface-variant/30">
+          © <span id="current-year">2024</span> Bit2Byte Club. [SYSTEM_READY]
+        </div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-12">
+        <a class="hover:text-primary transition-colors" href="#">GitHub</a>
+        <a class="hover:text-primary transition-colors" href="#">Discord</a>
+        <a class="hover:text-primary transition-colors" href="#">Facebook</a>
+        <a class="hover:text-primary transition-colors" href="#">Terminal</a>
+      </div>
+    </footer>
+    <script>
+      // ScrollSpy Logic
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll("nav div.hidden a");
+
+      const handleScroll = () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (pageYOffset >= sectionTop - 150) {
+            current = section.getAttribute("id");
+          }
+        });
+
+        navLinks.forEach((link) => {
+          link.classList.remove("text-primary", "font-bold");
+          link.classList.add("text-on-surface/50");
+          if (link.getAttribute("href") === `#${current}`) {
+            link.classList.add("text-primary", "font-bold");
+            link.classList.remove("text-on-surface/50");
+          }
+        });
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("load", () => {
+        handleScroll();
+        document.getElementById("current-year").textContent =
+          new Date().getFullYear();
+      });
+    </script>
+  </body>
+</html>
