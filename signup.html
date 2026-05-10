@@ -53,8 +53,8 @@
             <div
               class="tabs d-flex justify-content-between justify-content-sm-start"
             >
-              <a href="login.html" class="tab-btn">Login</a>
-              <a href="signup.html" class="tab-btn active">Sign Up</a>
+              <a href="login.php" class="tab-btn">Admin Login</a>
+              <a href="signup.html" class="tab-btn active">Member Form</a>
             </div>
 
             <form
@@ -65,13 +65,13 @@
               novalidate
             >
               <div class="form-group">
-                <label class="form-label">Name</label>
+                <label class="form-label">Full Name</label>
                 <div class="input-wrapper">
                   <i class="material-symbols-outlined input-icon">face</i>
                   <input
                     class="form-input"
-                    name="name"
-                    placeholder="Enter your name"
+                    name="full_name"
+                    placeholder="Enter your full name"
                     type="text"
                     autocomplete="name"
                     required
@@ -95,42 +95,83 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Password</label>
-                <div class="input-wrapper position-relative">
-                  <i class="material-symbols-outlined input-icon">lock</i>
+                <label class="form-label">Phone</label>
+                <div class="input-wrapper">
+                  <i class="material-symbols-outlined input-icon">call</i>
                   <input
                     class="form-input"
-                    id="signup-password"
-                    name="password"
-                    placeholder="Enter your password"
-                    type="password"
-                    autocomplete="new-password"
-                    required
+                    name="phone"
+                    placeholder="Enter your phone"
+                    type="tel"
+                    autocomplete="tel"
                   />
-                  <button
-                    type="button"
-                    id="toggle-signup-password"
-                    class="btn btn-sm btn-link p-0 position-absolute end-0 top-50 translate-middle-y me-2"
-                    tabindex="-1"
-                    style="
-                      color: #888;
-                      background: none;
-                      border: none;
-                      outline: none;
-                    "
-                  >
-                    <span class="material-symbols-outlined" id="signup-eye-icon"
-                      >visibility_off</span
-                    >
-                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Student ID</label>
+                <div class="input-wrapper">
+                  <i class="material-symbols-outlined input-icon">badge</i>
+                  <input
+                    class="form-input"
+                    name="student_id"
+                    placeholder="Enter student ID"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Department</label>
+                <div class="input-wrapper">
+                  <i class="material-symbols-outlined input-icon">school</i>
+                  <input
+                    class="form-input"
+                    name="department"
+                    placeholder="Enter department"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Batch</label>
+                <div class="input-wrapper">
+                  <i class="material-symbols-outlined input-icon">groups</i>
+                  <input
+                    class="form-input"
+                    name="batch"
+                    placeholder="Enter batch"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Skills</label>
+                <div class="input-wrapper">
+                  <i class="material-symbols-outlined input-icon">code</i>
+                  <textarea
+                    class="form-input form-textarea"
+                    name="skills"
+                    placeholder="Your skills"
+                    rows="3"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Reason For Joining</label>
+                <div class="input-wrapper">
+                  <i class="material-symbols-outlined input-icon">edit_note</i>
+                  <textarea
+                    class="form-input form-textarea"
+                    name="reason_for_joining"
+                    placeholder="Why join Bit2Byte?"
+                    rows="3"
+                  ></textarea>
                 </div>
               </div>
               <p class="policy">
-                By proceeding, you agree to comply with the
-                <span>Terms of Service</span> and <span>Privacy Policy</span>.
+                Member application only. Admin will review and contact you.
               </p>
               <button type="submit" class="btn-submit">
-                <span class="btn-text">Sign Up</span>
+                <span class="btn-text">Submit</span>
                 <div class="btn-overlay"></div>
               </button>
             </form>

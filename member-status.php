@@ -1,0 +1,42 @@
+<?php
+require_once __DIR__ . '/db.php';
+
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Cache-Control: post-check=0, pre-check=0', false);
+header('Pragma: no-cache');
+header('Expires: Thu, 01 Jan 1970 00:00:00 GMT');
+
+if (empty($_COOKIE[session_name()])) {
+    header('Location: login.php?message=' . urlencode('Please login as admin.'));
+    exit;
+}
+
+session_start();
+
+if (empty($_SESSION['admin_id'])) {
+    header('Location: login.php?message=' . urlencode('Please login as admin.'));
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: admin-dashboard.php');
+    exit;
+}
+
+$member_id = (int) ($_POST['member_id'] ?? 0);
+$status = $_POST['status'] ?? '';
+$allowed_statuses = ['approved', 'rejected'];
+
+if ($member_id < 1 || !in_array($status, $allowed_statuses, true)) {
+    header('Location: admin-dashboard.php');
+    exit;
+}
+
+$stmt = $pdo->prepare('UPDATE members SET status = :status WHERE id = :id');
+$stmt->execute([
+    ':status' => $status,
+    ':id' => $member_id,
+]);
+
+header('Location: admin-dashboard.php');
+exit;
