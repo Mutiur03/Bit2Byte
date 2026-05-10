@@ -1,21 +1,26 @@
 <?php
-header('Content-Type: application/json');
+function redirect_with_message($url, $message) {
+    header('Location: ' . $url . '?message=' . urlencode($message));
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'] ?? '';
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
+
     if (!$email || !$password) {
-        echo json_encode(['success' => false, 'message' => 'Email and password required.']);
-        exit;
+        redirect_with_message('login.html', 'Email and password required.');
     }
+
     $users = file_exists('users.json') ? json_decode(file_get_contents('users.json'), true) : [];
     foreach ($users as $user) {
         if ($user['email'] === $email && password_verify($password, $user['password'])) {
-            echo json_encode(['success' => true, 'message' => 'Login successful.']);
+            header('Location: welcome.html');
             exit;
         }
     }
-    echo json_encode(['success' => false, 'message' => 'Invalid credentials.']);
-    exit;
+
+    redirect_with_message('login.html', 'Invalid credentials.');
 }
-echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+
+redirect_with_message('login.html', 'Invalid request.');

@@ -60,6 +60,8 @@
             <form
               id="registerForm"
               class="auth-form needs-validation"
+              action="signup.php"
+              method="post"
               novalidate
             >
               <div class="form-group">
@@ -68,6 +70,7 @@
                   <i class="material-symbols-outlined input-icon">face</i>
                   <input
                     class="form-input"
+                    name="name"
                     placeholder="Enter your name"
                     type="text"
                     autocomplete="name"
@@ -83,6 +86,7 @@
                   >
                   <input
                     class="form-input"
+                    name="email"
                     placeholder="Enter your email"
                     type="email"
                     autocomplete="email"
@@ -97,6 +101,7 @@
                   <input
                     class="form-input"
                     id="signup-password"
+                    name="password"
                     placeholder="Enter your password"
                     type="password"
                     autocomplete="new-password"

@@ -57,7 +57,13 @@
               <a href="signup.html" class="tab-btn">Sign Up</a>
             </div>
 
-            <form id="loginForm" class="auth-form needs-validation" novalidate>
+            <form
+              id="loginForm"
+              class="auth-form needs-validation"
+              action="login.php"
+              method="post"
+              novalidate
+            >
               <div class="form-group">
                 <label class="form-label">Email Address</label>
                 <div class="input-wrapper">
@@ -66,6 +72,7 @@
                   >
                   <input
                     class="form-input"
+                    name="email"
                     placeholder="Enter your email"
                     type="email"
                     required
@@ -79,6 +86,7 @@
                   <input
                     class="form-input"
                     id="login-password"
+                    name="password"
                     placeholder="Enter your password"
                     type="password"
                     required

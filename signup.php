@@ -1,28 +1,33 @@
 <?php
-header('Content-Type: application/json');
+function redirect_with_message($url, $message) {
+    header('Location: ' . $url . '?message=' . urlencode($message));
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
+
     if (!$name || !$email || !$password) {
-        echo json_encode(['success' => false, 'message' => 'All fields are required.']);
-        exit;
+        redirect_with_message('signup.html', 'All fields are required.');
     }
+
     $users = file_exists('users.json') ? json_decode(file_get_contents('users.json'), true) : [];
     foreach ($users as $user) {
         if ($user['email'] === $email) {
-            echo json_encode(['success' => false, 'message' => 'Email already registered.']);
-            exit;
+            redirect_with_message('signup.html', 'Email already registered.');
         }
     }
+
     $users[] = [
         'name' => $name,
         'email' => $email,
         'password' => password_hash($password, PASSWORD_DEFAULT)
     ];
     file_put_contents('users.json', json_encode($users, JSON_PRETTY_PRINT));
-    echo json_encode(['success' => true, 'message' => 'Registration successful.']);
-    exit;
+
+    redirect_with_message('login.html', 'Registration successful. Please sign in.');
 }
-echo json_encode(['success' => false, 'message' => 'Invalid request.']);
+
+redirect_with_message('signup.html', 'Invalid request.');

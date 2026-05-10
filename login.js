@@ -1,21 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const loginForm = document.getElementById("loginForm");
-  if (loginForm) {
-    loginForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const email = loginForm.querySelector('input[type="email"]').value.trim();
-      const password = loginForm.querySelector('input[type="password"]').value;
-      const res = await fetch("login.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `email=${email}&password=${password}`,
-      });
-      const data = await res.json();
-      alert(data.message);
-      if (data.success) {
-        window.location.href = "welcome.html";
-      }
-    });
+  const params = new URLSearchParams(window.location.search);
+  const message = params.get("message");
+  if (message) {
+    alert(message);
   }
 
   const passwordInput = document.getElementById("login-password");
