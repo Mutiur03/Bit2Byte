@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/content-data.php';
+
+init_content_data($pdo);
+
+$events = visible_events($pdo);
+$projects = visible_projects($pdo);
+$team_members = visible_team_members($pdo);
+?>
 <!doctype html>
 
 <html lang="en">
@@ -158,53 +168,22 @@
           </div>
 
           <div class="event-list">
-            <article class="event-card">
-              <div class="event-meta">
-                <span class="event-status">Upcoming</span>
-                <time datetime="2024-10-24">Oct 24, 2024</time>
-              </div>
-              <h3>Algorithmic Mastery 2.0</h3>
-              <p>
-                A hands-on competitive programming session focused on dynamic
-                programming patterns, interview practice, and timed problem sets.
-              </p>
-              <div class="event-location">
-                <span class="material-symbols-outlined">location_on</span>
-                Lab 701
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-meta">
-                <span class="event-status">Upcoming</span>
-                <time datetime="2024-11-02">Nov 02, 2024</time>
-              </div>
-              <h3>Bit2Byte Intra-Hackathon</h3>
-              <p>
-                A team-based build day where students prototype small but useful
-                tools for campus workflows and present their work to mentors.
-              </p>
-              <div class="event-location">
-                <span class="material-symbols-outlined">location_on</span>
-                Main Auditorium
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-meta">
-                <span>Completed</span>
-                <time datetime="2024-09-15">Sep 15, 2024</time>
-              </div>
-              <h3>Rust for Beginners</h3>
-              <p>
-                An introductory workshop covering ownership, memory safety, and
-                practical examples for students exploring systems programming.
-              </p>
-              <div class="event-location">
-                <span class="material-symbols-outlined">history</span>
-                Session archive available
-              </div>
-            </article>
+            <?php foreach ($events as $event): ?>
+              <article class="event-card">
+                <div class="event-meta">
+                  <span class="event-status"><?= e($event['status']) ?></span>
+                  <?php if ($event['event_date']): ?>
+                    <time datetime="<?= e($event['event_date']) ?>"><?= e(date('M d, Y', strtotime($event['event_date']))) ?></time>
+                  <?php endif; ?>
+                </div>
+                <h3><?= e($event['title']) ?></h3>
+                <p><?= e($event['description']) ?></p>
+                <div class="event-location">
+                  <span class="material-symbols-outlined"><?= e($event['location_icon']) ?></span>
+                  <?= e($event['location']) ?>
+                </div>
+              </article>
+            <?php endforeach; ?>
           </div>
         </div>
       </section>
@@ -219,31 +198,22 @@
           </p>
 
           <div class="project-grid">
-            <article class="project-card">
-              <h3>Campus Resource Portal</h3>
-              <p>
-                A central place for club notes, workshop material, event
-                resources, and onboarding guides for new members.
-              </p>
-              <ul class="project-tags" aria-label="Project technologies">
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>JavaScript</li>
-              </ul>
-            </article>
-
-            <article class="project-card">
-              <h3>Event Registration System</h3>
-              <p>
-                A lightweight registration and attendee tracking tool for club
-                workshops, competitions, and internal training programs.
-              </p>
-              <ul class="project-tags" aria-label="Project technologies">
-                <li>PHP</li>
-                <li>JSON</li>
-                <li>Forms</li>
-              </ul>
-            </article>
+            <?php foreach ($projects as $project): ?>
+              <article class="project-card">
+                <h3><?= e($project['title']) ?></h3>
+                <p><?= e($project['description']) ?></p>
+                <?php
+                  $tags = array_filter(array_map('trim', explode(',', (string) $project['tags'])));
+                ?>
+                <?php if ($tags): ?>
+                  <ul class="project-tags" aria-label="Project technologies">
+                    <?php foreach ($tags as $tag): ?>
+                      <li><?= e($tag) ?></li>
+                    <?php endforeach; ?>
+                  </ul>
+                <?php endif; ?>
+              </article>
+            <?php endforeach; ?>
           </div>
         </div>
       </section>
@@ -258,50 +228,18 @@
           </p>
 
           <div class="team-grid">
-            <article class="team-card">
-              <div class="team-photo">
-                <img src="assets/team-arif.png" alt="Arif Rahman" />
-              </div>
-              <h3>Arif Rahman</h3>
-              <div class="team-role">Club Lead</div>
-              <p>
-                Coordinates club goals, partnerships, and the yearly activity
-                plan.
-              </p>
-            </article>
-            <article class="team-card">
-              <div class="team-photo">
-                <img src="assets/team-nadia.png" alt="Nadia Sultana" />
-              </div>
-              <h3>Nadia Sultana</h3>
-              <div class="team-role">Workshop Lead</div>
-              <p>
-                Plans technical sessions and supports members during guided
-                learning tracks.
-              </p>
-            </article>
-            <article class="team-card">
-              <div class="team-photo">
-                <img src="assets/team-mahin.png" alt="Mahin Hasan" />
-              </div>
-              <h3>Mahin Hasan</h3>
-              <div class="team-role">Project Mentor</div>
-              <p>
-                Helps teams scope features, review pull requests, and prepare
-                demos.
-              </p>
-            </article>
-            <article class="team-card">
-              <div class="team-photo">
-                <img src="assets/team-tasnim.png" alt="Tasnim Farah" />
-              </div>
-              <h3>Tasnim Farah</h3>
-              <div class="team-role">Events Coordinator</div>
-              <p>
-                Manages event logistics, member communication, and participant
-                support.
-              </p>
-            </article>
+            <?php foreach ($team_members as $team_member): ?>
+              <article class="team-card">
+                <?php if ($team_member['photo_path']): ?>
+                  <div class="team-photo">
+                    <img src="<?= e($team_member['photo_path']) ?>" alt="<?= e($team_member['name']) ?>" />
+                  </div>
+                <?php endif; ?>
+                <h3><?= e($team_member['name']) ?></h3>
+                <div class="team-role"><?= e($team_member['role']) ?></div>
+                <p><?= e($team_member['bio']) ?></p>
+              </article>
+            <?php endforeach; ?>
           </div>
         </div>
       </section>

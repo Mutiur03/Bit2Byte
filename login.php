@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/core-data.php';
+
+init_core_data($pdo);
 
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
@@ -90,7 +93,7 @@ redirect_logged_in_admin();
       class="container-fluid min-vh-100 d-flex flex-column justify-content-center align-items-center py-4 py-md-5"
     >
       <a
-        href="index.html"
+        href="index.php"
         class="brand mb-4 mb-md-5"
         title="Return to Core System"
       >
