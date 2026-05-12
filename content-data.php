@@ -1,9 +1,5 @@
 <?php
 
-function ensure_content_tables(PDO $pdo) {
-    // Database DDL lives in schema.sql and must be applied manually.
-}
-
 function seed_content_tables(PDO $pdo) {
     $count = (int) $pdo->query('SELECT COUNT(*) FROM events')->fetchColumn();
     if ($count === 0) {
@@ -11,11 +7,15 @@ function seed_content_tables(PDO $pdo) {
             'INSERT INTO events (title, event_date, status, description, location, location_icon, sort_order)
              VALUES (:title, :event_date, :status, :description, :location, :location_icon, :sort_order)'
         );
-
+        $dates = [
+            date('Y-m-d', strtotime('+15 days')),
+            date('Y-m-d', strtotime('+5 days')),
+            date('Y-m-d', strtotime('-10 days')),
+        ];
         $events = [
-            ['Algorithmic Mastery 2.0', '2024-10-24', 'Upcoming', 'A hands-on competitive programming session focused on dynamic programming patterns, interview practice, and timed problem sets.', 'Lab 701', 'location_on', 1],
-            ['Bit2Byte Intra-Hackathon', '2024-11-02', 'Upcoming', 'A team-based build day where students prototype small but useful tools for campus workflows and present their work to mentors.', 'Main Auditorium', 'location_on', 2],
-            ['Rust for Beginners', '2024-09-15', 'Completed', 'An introductory workshop covering ownership, memory safety, and practical examples for students exploring systems programming.', 'Session archive available', 'history', 3],
+            ['Algorithmic Mastery 2.0', $dates[0], 'Upcoming', 'A hands-on competitive programming session focused on dynamic programming patterns, interview practice, and timed problem sets.', 'Lab 701', 'location_on', 1],
+            ['Bit2Byte Intra-Hackathon', $dates[1], 'Upcoming', 'A team-based build day where students prototype small but useful tools for campus workflows and present their work to mentors.', 'Main Auditorium', 'location_on', 2],
+            ['Rust for Beginners', $dates[2], 'Completed', 'An introductory workshop covering ownership, memory safety, and practical examples for students exploring systems programming.', 'Session archive available', 'history', 3],
         ];
 
         foreach ($events as $event) {
@@ -80,22 +80,25 @@ function seed_content_tables(PDO $pdo) {
 }
 
 function init_content_data(PDO $pdo) {
-    ensure_content_tables($pdo);
-    seed_content_tables($pdo);
+    try {
+        seed_content_tables($pdo);
+    } catch (Exception $e) {
+        error_log('Error initializing content data: ' . $e->getMessage());
+    }
 }
 
 function visible_events(PDO $pdo) {
-    $stmt = $pdo->query('SELECT * FROM events WHERE is_visible = 1 ORDER BY sort_order ASC, event_date ASC, id ASC');
+    $stmt = $pdo->query('SELECT * FROM events ORDER BY sort_order ASC, event_date ASC, id ASC');
     return $stmt->fetchAll();
 }
 
 function visible_projects(PDO $pdo) {
-    $stmt = $pdo->query('SELECT * FROM projects WHERE is_visible = 1 ORDER BY sort_order ASC, id ASC');
+    $stmt = $pdo->query('SELECT * FROM projects ORDER BY sort_order ASC, id ASC');
     return $stmt->fetchAll();
 }
 
 function visible_team_members(PDO $pdo) {
-    $stmt = $pdo->query('SELECT * FROM team_members WHERE is_visible = 1 ORDER BY sort_order ASC, id ASC');
+    $stmt = $pdo->query('SELECT * FROM team_members ORDER BY sort_order ASC, id ASC');
     return $stmt->fetchAll();
 }
 

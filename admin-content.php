@@ -52,15 +52,20 @@ if ($action === 'delete' && $id > 0) {
 }
 
 if ($type === 'event') {
+    $allowed_icons = ['location_on', 'history', 'event', 'school', 'groups', 'code'];
+    $location_icon = trim($_POST['location_icon'] ?? 'location_on') ?: 'location_on';
+    if (!in_array($location_icon, $allowed_icons, true)) {
+        $location_icon = 'location_on';
+    }
+
     $payload = [
         ':title' => trim($_POST['title'] ?? ''),
         ':event_date' => trim($_POST['event_date'] ?? '') ?: null,
         ':status' => trim($_POST['status'] ?? 'Upcoming') ?: 'Upcoming',
         ':description' => trim($_POST['description'] ?? ''),
         ':location' => trim($_POST['location'] ?? ''),
-        ':location_icon' => trim($_POST['location_icon'] ?? 'location_on') ?: 'location_on',
+        ':location_icon' => $location_icon,
         ':sort_order' => (int) ($_POST['sort_order'] ?? 0),
-        ':is_visible' => isset($_POST['is_visible']) ? 1 : 0,
     ];
 
     if ($payload[':title'] !== '') {
@@ -69,14 +74,13 @@ if ($type === 'event') {
             $stmt = $pdo->prepare(
                 'UPDATE events
                  SET title = :title, event_date = :event_date, status = :status, description = :description,
-                     location = :location, location_icon = :location_icon, sort_order = :sort_order,
-                     is_visible = :is_visible
+                     location = :location, location_icon = :location_icon, sort_order = :sort_order
                  WHERE id = :id'
             );
         } else {
             $stmt = $pdo->prepare(
-                'INSERT INTO events (title, event_date, status, description, location, location_icon, sort_order, is_visible)
-                 VALUES (:title, :event_date, :status, :description, :location, :location_icon, :sort_order, :is_visible)'
+                'INSERT INTO events (title, event_date, status, description, location, location_icon, sort_order)
+                 VALUES (:title, :event_date, :status, :description, :location, :location_icon, :sort_order)'
             );
         }
         $stmt->execute($payload);
@@ -92,7 +96,6 @@ if ($type === 'project') {
         ':description' => trim($_POST['description'] ?? ''),
         ':tags' => trim($_POST['tags'] ?? ''),
         ':sort_order' => (int) ($_POST['sort_order'] ?? 0),
-        ':is_visible' => isset($_POST['is_visible']) ? 1 : 0,
     ];
 
     if ($payload[':title'] !== '') {
@@ -101,13 +104,13 @@ if ($type === 'project') {
             $stmt = $pdo->prepare(
                 'UPDATE projects
                  SET title = :title, description = :description, tags = :tags,
-                     sort_order = :sort_order, is_visible = :is_visible
+                     sort_order = :sort_order
                  WHERE id = :id'
             );
         } else {
             $stmt = $pdo->prepare(
-                'INSERT INTO projects (title, description, tags, sort_order, is_visible)
-                 VALUES (:title, :description, :tags, :sort_order, :is_visible)'
+                'INSERT INTO projects (title, description, tags, sort_order)
+                 VALUES (:title, :description, :tags, :sort_order)'
             );
         }
         $stmt->execute($payload);
@@ -134,7 +137,6 @@ $payload = [
     ':photo_path' => $photo_path,
     ':bio' => trim($_POST['bio'] ?? ''),
     ':sort_order' => (int) ($_POST['sort_order'] ?? 0),
-    ':is_visible' => isset($_POST['is_visible']) ? 1 : 0,
 ];
 
 if ($payload[':name'] !== '' && $payload[':role'] !== '') {
@@ -143,13 +145,13 @@ if ($payload[':name'] !== '' && $payload[':role'] !== '') {
         $stmt = $pdo->prepare(
             'UPDATE team_members
              SET name = :name, role = :role, photo_path = :photo_path, bio = :bio,
-                 sort_order = :sort_order, is_visible = :is_visible
+                 sort_order = :sort_order
              WHERE id = :id'
         );
     } else {
         $stmt = $pdo->prepare(
-            'INSERT INTO team_members (name, role, photo_path, bio, sort_order, is_visible)
-             VALUES (:name, :role, :photo_path, :bio, :sort_order, :is_visible)'
+            'INSERT INTO team_members (name, role, photo_path, bio, sort_order)
+             VALUES (:name, :role, :photo_path, :bio, :sort_order)'
         );
     }
     $stmt->execute($payload);

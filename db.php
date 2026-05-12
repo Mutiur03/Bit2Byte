@@ -1,8 +1,24 @@
 <?php
-$db_host = 'localhost';
-$db_name = 'bit2byte';
-$db_user = 'root';
-$db_pass = '';
+function load_env($path) {
+    if (!is_file($path)) return;
+
+    foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) continue;
+        [$key, $value] = explode('=', $line, 2);
+        $_ENV[trim($key)] = trim(trim($value), "\"'");
+    }
+}
+
+function env_value($key, $default = '') {
+    return $_ENV[$key] ?? getenv($key) ?: $default;
+}
+
+load_env(__DIR__ . '/.env');
+
+$db_host = env_value('DB_HOST', 'localhost');
+$db_name = env_value('DB_NAME', 'bit2byte');
+$db_user = env_value('DB_USER', 'root');
+$db_pass = env_value('DB_PASS', '');
 
 try {
     $pdo = new PDO(

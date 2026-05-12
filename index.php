@@ -171,7 +171,7 @@ $team_members = visible_team_members($pdo);
             <?php foreach ($events as $event): ?>
               <article class="event-card">
                 <div class="event-meta">
-                  <span class="event-status"><?= e($event['status']) ?></span>
+                  <span class="event-status"><?= e($event['event_date']) > date('Y-m-d') ? 'Upcoming' : 'Completed' ?></span>
                   <?php if ($event['event_date']): ?>
                     <time datetime="<?= e($event['event_date']) ?>"><?= e(date('M d, Y', strtotime($event['event_date']))) ?></time>
                   <?php endif; ?>

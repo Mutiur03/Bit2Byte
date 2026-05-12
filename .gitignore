@@ -3,3 +3,5 @@ uploads/members/*
 !uploads/members/.gitkeep
 uploads/team/*
 !uploads/team/.gitkeep
+.env*
+!.env.example
