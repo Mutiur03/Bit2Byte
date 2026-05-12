@@ -1,0 +1,26 @@
+{
+  "name": "bit2byte",
+  "version": "1.0.0",
+  "description": "",
+  "main": "login.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "browser-sync start --proxy \"localhost/Bit2Byte\" --files \"**/*.php, **/*.html, **/*.css, **/*.js\""
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mutiur03/Bit2Byte.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Mutiur03/Bit2Byte/issues"
+  },
+  "homepage": "https://github.com/Mutiur03/Bit2Byte#readme",
+  "devDependencies": {
+    "browser-sync": "^3.0.4"
+  }
+}

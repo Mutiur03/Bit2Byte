@@ -33,6 +33,20 @@ $pending_members = count(array_filter($members, fn($member) => $member['status']
 $visible_events = count(array_filter($events, fn($event) => (int) $event['is_visible'] === 1));
 $visible_projects = count(array_filter($projects, fn($project) => (int) $project['is_visible'] === 1));
 $visible_team_members = count(array_filter($team_members, fn($team_member) => (int) $team_member['is_visible'] === 1));
+
+function status_class($status) {
+    $key = strtolower((string) $status);
+    if (in_array($key, ['approved', 'visible'], true)) {
+        return 'status-pill status-pill-success';
+    }
+    if (in_array($key, ['rejected', 'hidden'], true)) {
+        return 'status-pill status-pill-danger';
+    }
+    if ($key === 'pending') {
+        return 'status-pill status-pill-warning';
+    }
+    return 'status-pill status-pill-info';
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -48,7 +62,7 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="admin.css" />
+    <link rel="stylesheet" href="admin.css?v=20260512-3" />
   </head>
   <body class="admin-page overflow-auto">
     <div class="bg-overlay grid-pattern"></div>
@@ -117,12 +131,9 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
               <table class="table table-hover align-middle mb-0 admin-table">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Photo</th>
+                    <th>Applicant</th>
                     <th>Contact</th>
                     <th>Academic</th>
-                    <th>Skills</th>
-                    <th>Reason</th>
                     <th>Status</th>
                     <th>Action</th>
                     <th>Submitted</th>
@@ -131,28 +142,31 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
                 <tbody>
                   <?php foreach ($members as $member): ?>
                     <tr>
-                      <td data-label="Name"><?= e($member['full_name']) ?></td>
-                      <td data-label="Photo">
-                        <?php if (!empty($member['photo_path'])): ?>
-                          <img class="admin-thumb" src="<?= e($member['photo_path']) ?>" alt="<?= e($member['full_name']) ?>" />
-                        <?php else: ?>
-                          <span class="text-secondary">No photo</span>
-                        <?php endif; ?>
+                      <td data-label="Applicant">
+                        <div class="applicant-cell">
+                          <?php if (!empty($member['photo_path'])): ?>
+                            <img class="admin-thumb" src="<?= e($member['photo_path']) ?>" alt="<?= e($member['full_name']) ?>" />
+                          <?php else: ?>
+                            <div class="admin-thumb admin-thumb-placeholder"><?= e(strtoupper(substr($member['full_name'], 0, 1))) ?></div>
+                          <?php endif; ?>
+                          <div>
+                            <strong><?= e($member['full_name']) ?></strong>
+                            <small><?= e($member['email']) ?></small>
+                          </div>
+                        </div>
                       </td>
                       <td data-label="Contact">
-                        <?= e($member['email']) ?><br />
-                        <small><?= e($member['phone']) ?></small>
+                        <?= e($member['phone'] ?: 'No phone') ?>
                       </td>
                       <td data-label="Academic">
                         <?= e($member['department']) ?><br />
                         <small>ID: <?= e($member['student_id']) ?> | Batch: <?= e($member['batch']) ?></small>
                       </td>
-                      <td data-label="Skills"><?= nl2br(e($member['skills'])) ?></td>
-                      <td data-label="Reason"><?= nl2br(e($member['reason_for_joining'])) ?></td>
-                      <td data-label="Status"><span class="status-pill"><?= e($member['status']) ?></span></td>
+                      <td data-label="Status"><span class="<?= e(status_class($member['status'])) ?>"><?= e($member['status']) ?></span></td>
                       <td data-label="Action">
                         <form class="admin-actions" action="member-status.php" method="post">
                           <input type="hidden" name="member_id" value="<?= e($member['id']) ?>" />
+                          <button class="btn btn-sm btn-outline-info" type="button" data-open-member-preview data-name="<?= e($member['full_name']) ?>" data-email="<?= e($member['email']) ?>" data-phone="<?= e($member['phone']) ?>" data-student-id="<?= e($member['student_id']) ?>" data-department="<?= e($member['department']) ?>" data-batch="<?= e($member['batch']) ?>" data-skills="<?= e($member['skills']) ?>" data-reason="<?= e($member['reason_for_joining']) ?>" data-status="<?= e($member['status']) ?>" data-photo="<?= e($member['photo_path'] ?? '') ?>" data-submitted="<?= e(date('F j, Y, g:i a', strtotime($member['created_at']))) ?>">View</button>
                           <?php if ($member['status'] === 'pending'): ?>
                             <button class="btn btn-sm btn-success" name="status" value="approved" type="submit">Approve</button>
                             <button class="btn btn-sm btn-danger" name="status" value="rejected" type="submit">Reject</button>
@@ -202,11 +216,11 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
                     <td data-label="Status"><?= e($event['status']) ?></td>
                     <td data-label="Date"><?= e($event['event_date'] ? date('M j, Y', strtotime($event['event_date'])) : 'No date') ?></td>
                     <td data-label="Location"><?= e($event['location']) ?></td>
-                    <td data-label="Visibility"><span class="status-pill"><?= e($event['is_visible'] ? 'Visible' : 'Hidden') ?></span></td>
+                    <td data-label="Visibility"><span class="<?= e(status_class($event['is_visible'] ? 'visible' : 'hidden')) ?>"><?= e($event['is_visible'] ? 'Visible' : 'Hidden') ?></span></td>
                     <td data-label="Actions">
                       <div class="row-actions">
                         <button class="btn btn-sm btn-outline-info" type="button" data-open-preview data-title="<?= e($event['title']) ?>" data-kicker="<?= e($event['status']) ?>" data-description="<?= e($event['description']) ?>" data-meta="<?= e(($event['event_date'] ? date('M j, Y', strtotime($event['event_date'])) : 'No date') . ' | ' . $event['location']) ?>">Preview</button>
-                        <button class="btn btn-sm btn-outline-light" type="button" data-open-event-modal data-mode="edit" data-id="<?= e($event['id']) ?>" data-title="<?= e($event['title']) ?>" data-event-date="<?= e($event['event_date']) ?>" data-status="<?= e($event['status']) ?>" data-description="<?= e($event['description']) ?>" data-location="<?= e($event['location']) ?>" data-location-icon="<?= e($event['location_icon']) ?>" data-sort-order="<?= e($event['sort_order']) ?>" data-is-visible="<?= e($event['is_visible']) ?>">Edit</button>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-open-event-modal data-mode="edit" data-id="<?= e($event['id']) ?>" data-title="<?= e($event['title']) ?>" data-event-date="<?= e($event['event_date']) ?>" data-status="<?= e($event['status']) ?>" data-description="<?= e($event['description']) ?>" data-location="<?= e($event['location']) ?>" data-location-icon="<?= e($event['location_icon']) ?>" data-sort-order="<?= e($event['sort_order']) ?>" data-is-visible="<?= e($event['is_visible']) ?>">Edit</button>
                         <button class="btn btn-sm btn-outline-danger" type="button" data-open-delete data-type="event" data-id="<?= e($event['id']) ?>" data-title="<?= e($event['title']) ?>">Delete</button>
                       </div>
                     </td>
@@ -247,11 +261,11 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
                     </td>
                     <td data-label="Tags"><?= e($project['tags'] ?: 'No tags') ?></td>
                     <td data-label="Sort"><?= e($project['sort_order']) ?></td>
-                    <td data-label="Visibility"><span class="status-pill"><?= e($project['is_visible'] ? 'Visible' : 'Hidden') ?></span></td>
+                    <td data-label="Visibility"><span class="<?= e(status_class($project['is_visible'] ? 'visible' : 'hidden')) ?>"><?= e($project['is_visible'] ? 'Visible' : 'Hidden') ?></span></td>
                     <td data-label="Actions">
                       <div class="row-actions">
                         <button class="btn btn-sm btn-outline-info" type="button" data-open-preview data-title="<?= e($project['title']) ?>" data-kicker="<?= e($project['tags'] ?: 'Project') ?>" data-description="<?= e($project['description']) ?>" data-meta="<?= e('Sort ' . $project['sort_order']) ?>">Preview</button>
-                        <button class="btn btn-sm btn-outline-light" type="button" data-open-project-modal data-mode="edit" data-id="<?= e($project['id']) ?>" data-title="<?= e($project['title']) ?>" data-description="<?= e($project['description']) ?>" data-tags="<?= e($project['tags']) ?>" data-sort-order="<?= e($project['sort_order']) ?>" data-is-visible="<?= e($project['is_visible']) ?>">Edit</button>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-open-project-modal data-mode="edit" data-id="<?= e($project['id']) ?>" data-title="<?= e($project['title']) ?>" data-description="<?= e($project['description']) ?>" data-tags="<?= e($project['tags']) ?>" data-sort-order="<?= e($project['sort_order']) ?>" data-is-visible="<?= e($project['is_visible']) ?>">Edit</button>
                         <button class="btn btn-sm btn-outline-danger" type="button" data-open-delete data-type="project" data-id="<?= e($project['id']) ?>" data-title="<?= e($project['title']) ?>">Delete</button>
                       </div>
                     </td>
@@ -300,11 +314,11 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
                       <?php endif; ?>
                     </td>
                     <td data-label="Sort"><?= e($team_member['sort_order']) ?></td>
-                    <td data-label="Visibility"><span class="status-pill"><?= e($team_member['is_visible'] ? 'Visible' : 'Hidden') ?></span></td>
+                    <td data-label="Visibility"><span class="<?= e(status_class($team_member['is_visible'] ? 'visible' : 'hidden')) ?>"><?= e($team_member['is_visible'] ? 'Visible' : 'Hidden') ?></span></td>
                     <td data-label="Actions">
                       <div class="row-actions">
                         <button class="btn btn-sm btn-outline-info" type="button" data-open-preview data-title="<?= e($team_member['name']) ?>" data-kicker="<?= e($team_member['role']) ?>" data-description="<?= e($team_member['bio']) ?>" data-meta="<?= e($team_member['photo_path'] ?: 'No photo') ?>" data-image="<?= e($team_member['photo_path']) ?>">Preview</button>
-                        <button class="btn btn-sm btn-outline-light" type="button" data-open-team-modal data-mode="edit" data-id="<?= e($team_member['id']) ?>" data-name="<?= e($team_member['name']) ?>" data-role="<?= e($team_member['role']) ?>" data-photo-path="<?= e($team_member['photo_path']) ?>" data-bio="<?= e($team_member['bio']) ?>" data-sort-order="<?= e($team_member['sort_order']) ?>" data-is-visible="<?= e($team_member['is_visible']) ?>">Edit</button>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-open-team-modal data-mode="edit" data-id="<?= e($team_member['id']) ?>" data-name="<?= e($team_member['name']) ?>" data-role="<?= e($team_member['role']) ?>" data-photo-path="<?= e($team_member['photo_path']) ?>" data-bio="<?= e($team_member['bio']) ?>" data-sort-order="<?= e($team_member['sort_order']) ?>" data-is-visible="<?= e($team_member['is_visible']) ?>">Edit</button>
                         <button class="btn btn-sm btn-outline-danger" type="button" data-open-delete data-type="team" data-id="<?= e($team_member['id']) ?>" data-title="<?= e($team_member['name']) ?>">Delete</button>
                       </div>
                     </td>
@@ -413,6 +427,56 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
           <h4 id="preview-heading"></h4>
           <p id="preview-description"></p>
           <small id="preview-meta"></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-modal" id="member-preview-modal" aria-hidden="true">
+      <div class="admin-modal-panel member-preview-panel" role="dialog" aria-modal="true" aria-labelledby="member-preview-title">
+        <div class="admin-modal-header">
+          <h3 id="member-preview-title">Member Application</h3>
+          <button class="modal-close" type="button" data-close-modal>&times;</button>
+        </div>
+        <div class="member-preview">
+          <div class="member-preview-header">
+            <img id="member-preview-photo" class="member-preview-photo" alt="" hidden />
+            <div class="member-preview-avatar" id="member-preview-avatar"></div>
+            <div>
+              <h4 id="member-preview-name"></h4>
+              <p id="member-preview-email"></p>
+              <span class="status-pill" id="member-preview-status"></span>
+            </div>
+          </div>
+          <dl class="member-detail-grid">
+            <div>
+              <dt>Phone</dt>
+              <dd id="member-preview-phone"></dd>
+            </div>
+            <div>
+              <dt>Student ID</dt>
+              <dd id="member-preview-student-id"></dd>
+            </div>
+            <div>
+              <dt>Department</dt>
+              <dd id="member-preview-department"></dd>
+            </div>
+            <div>
+              <dt>Batch</dt>
+              <dd id="member-preview-batch"></dd>
+            </div>
+            <div>
+              <dt>Submitted</dt>
+              <dd id="member-preview-submitted"></dd>
+            </div>
+          </dl>
+          <div class="member-detail-block">
+            <h5>Skills</h5>
+            <p id="member-preview-skills"></p>
+          </div>
+          <div class="member-detail-block">
+            <h5>Reason for joining</h5>
+            <p id="member-preview-reason"></p>
+          </div>
         </div>
       </div>
     </div>
@@ -550,6 +614,41 @@ $visible_team_members = count(array_filter($team_members, fn($team_member) => (i
           previewImage.alt = button.dataset.title || "";
           previewImage.hidden = !button.dataset.image;
           openModal("preview-modal");
+        });
+      });
+
+      document.querySelectorAll("[data-open-member-preview]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const photo = document.getElementById("member-preview-photo");
+          const avatar = document.getElementById("member-preview-avatar");
+          const name = button.dataset.name || "";
+
+          document.getElementById("member-preview-name").textContent = name;
+          document.getElementById("member-preview-email").textContent = button.dataset.email || "No email";
+          const memberStatus = document.getElementById("member-preview-status");
+          const status = button.dataset.status || "";
+          memberStatus.textContent = status;
+          memberStatus.className = `status-pill status-pill-${status === "approved" ? "success" : status === "rejected" ? "danger" : "warning"}`;
+          document.getElementById("member-preview-phone").textContent = button.dataset.phone || "No phone";
+          document.getElementById("member-preview-student-id").textContent = button.dataset.studentId || "Not provided";
+          document.getElementById("member-preview-department").textContent = button.dataset.department || "Not provided";
+          document.getElementById("member-preview-batch").textContent = button.dataset.batch || "Not provided";
+          document.getElementById("member-preview-submitted").textContent = button.dataset.submitted || "";
+          document.getElementById("member-preview-skills").textContent = button.dataset.skills || "Not provided";
+          document.getElementById("member-preview-reason").textContent = button.dataset.reason || "Not provided";
+
+          if (button.dataset.photo) {
+            photo.src = button.dataset.photo;
+            photo.alt = name;
+            photo.hidden = false;
+            avatar.hidden = true;
+          } else {
+            photo.hidden = true;
+            avatar.hidden = false;
+            avatar.textContent = name.charAt(0).toUpperCase();
+          }
+
+          openModal("member-preview-modal");
         });
       });
 

@@ -150,10 +150,14 @@
                   <i class="material-symbols-outlined input-icon">image</i>
                   <input
                     class="form-input"
+                    id="member-image-input"
                     name="member_image"
                     type="file"
                     accept="image/jpeg,image/png,image/webp,image/gif"
                   />
+                </div>
+                <div class="upload-preview" id="member-image-preview-wrap" hidden>
+                  <img id="member-image-preview" alt="Selected profile image preview" />
                 </div>
               </div>
               <div class="form-group">
@@ -200,6 +204,25 @@
         document.getElementById("current-year").textContent =
           new Date().getFullYear();
       });
+
+      document
+        .getElementById("member-image-input")
+        .addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          const previewWrap = document.getElementById(
+            "member-image-preview-wrap"
+          );
+          const preview = document.getElementById("member-image-preview");
+
+          if (!file) {
+            previewWrap.hidden = true;
+            preview.removeAttribute("src");
+            return;
+          }
+
+          preview.src = URL.createObjectURL(file);
+          previewWrap.hidden = false;
+        });
     </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

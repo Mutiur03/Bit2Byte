@@ -1,48 +1,7 @@
 <?php
 
 function ensure_content_tables(PDO $pdo) {
-    $pdo->exec(
-        "CREATE TABLE IF NOT EXISTS events (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(160) NOT NULL,
-            event_date DATE NULL,
-            status VARCHAR(40) NOT NULL DEFAULT 'Upcoming',
-            description TEXT NULL,
-            location VARCHAR(160) NULL,
-            location_icon VARCHAR(80) NOT NULL DEFAULT 'location_on',
-            sort_order INT NOT NULL DEFAULT 0,
-            is_visible TINYINT(1) NOT NULL DEFAULT 1,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
-    );
-
-    $pdo->exec(
-        "CREATE TABLE IF NOT EXISTS projects (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(160) NOT NULL,
-            description TEXT NULL,
-            tags VARCHAR(255) NULL,
-            sort_order INT NOT NULL DEFAULT 0,
-            is_visible TINYINT(1) NOT NULL DEFAULT 1,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
-    );
-
-    $pdo->exec(
-        "CREATE TABLE IF NOT EXISTS team_members (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(120) NOT NULL,
-            role VARCHAR(120) NOT NULL,
-            photo_path VARCHAR(255) NULL,
-            bio TEXT NULL,
-            sort_order INT NOT NULL DEFAULT 0,
-            is_visible TINYINT(1) NOT NULL DEFAULT 1,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
-    );
+    // Database DDL lives in schema.sql and must be applied manually.
 }
 
 function seed_content_tables(PDO $pdo) {

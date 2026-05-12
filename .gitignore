@@ -1,1 +1,5 @@
-users.json
+node_modules/
+uploads/members/*
+!uploads/members/.gitkeep
+uploads/team/*
+!uploads/team/.gitkeep

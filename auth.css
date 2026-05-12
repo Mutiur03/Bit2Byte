@@ -210,11 +210,19 @@ main {
   align-items: center;
 }
 
+.input-wrapper:has(.form-textarea) {
+  align-items: flex-start;
+}
+
 .input-icon {
   position: absolute;
   left: 0;
   color: rgba(var(--primary-rgb), 0.3);
   font-size: 1.2rem;
+}
+
+.input-wrapper:has(.form-textarea) .input-icon {
+  top: 1rem;
 }
 
 .form-input {
@@ -244,7 +252,29 @@ main {
 
 .form-textarea {
   min-height: 96px;
+  line-height: 1.5;
   resize: vertical;
+}
+
+.upload-preview {
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  border: 1px solid rgba(var(--primary-rgb), 0.18);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.upload-preview[hidden] {
+  display: none;
+}
+
+.upload-preview img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border: 1px solid rgba(var(--primary-rgb), 0.25);
 }
 
 .form-options {
