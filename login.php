@@ -1,8 +1,5 @@
 <?php
 require_once __DIR__ . '/db.php';
-require_once __DIR__ . '/core-data.php';
-
-init_core_data($pdo);
 
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
@@ -34,9 +31,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect_with_message('login.php', 'Email and password required.');
     }
 
-    $stmt = $pdo->prepare('SELECT id, name, email, password_hash FROM admins WHERE email = :email LIMIT 1');
-    $stmt->execute([':email' => $email]);
-    $admin = $stmt->fetch();
+    try {
+        $stmt = $pdo->prepare('SELECT id, name, email, password_hash FROM admins WHERE email = :email LIMIT 1');
+        $stmt->execute([':email' => $email]);
+        $admin = $stmt->fetch();
+    } catch (PDOException $e) {
+        if (!is_missing_table_error($e)) {
+            throw $e;
+        }
+
+        redirect_with_message('login.php', 'Database tables are missing. Run setup first.');
+    }
 
     if ($admin && password_verify($password, $admin['password_hash'])) {
         if (session_status() !== PHP_SESSION_ACTIVE) {

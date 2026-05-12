@@ -25,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-init_content_data($pdo);
-
 $type = $_POST['type'] ?? '';
 $action = $_POST['action'] ?? '';
 $id = (int) ($_POST['id'] ?? 0);
@@ -38,6 +36,19 @@ if (!in_array($type, $allowed_types, true) || !in_array($action, $allowed_action
     exit;
 }
 
+function execute_or_redirect(PDOStatement $stmt, array $payload, $location) {
+    try {
+        $stmt->execute($payload);
+    } catch (PDOException $e) {
+        if (!is_missing_table_error($e)) {
+            throw $e;
+        }
+    }
+
+    header('Location: ' . $location);
+    exit;
+}
+
 if ($action === 'delete' && $id > 0) {
     $tables = [
         'event' => 'events',
@@ -46,9 +57,7 @@ if ($action === 'delete' && $id > 0) {
     ];
 
     $stmt = $pdo->prepare("DELETE FROM {$tables[$type]} WHERE id = :id");
-    $stmt->execute([':id' => $id]);
-    header('Location: admin-dashboard.php#' . $type . 's');
-    exit;
+    execute_or_redirect($stmt, [':id' => $id], 'admin-dashboard.php#' . $type . 's');
 }
 
 if ($type === 'event') {
@@ -61,7 +70,6 @@ if ($type === 'event') {
     $payload = [
         ':title' => trim($_POST['title'] ?? ''),
         ':event_date' => trim($_POST['event_date'] ?? '') ?: null,
-        ':status' => trim($_POST['status'] ?? 'Upcoming') ?: 'Upcoming',
         ':description' => trim($_POST['description'] ?? ''),
         ':location' => trim($_POST['location'] ?? ''),
         ':location_icon' => $location_icon,
@@ -73,17 +81,17 @@ if ($type === 'event') {
             $payload[':id'] = $id;
             $stmt = $pdo->prepare(
                 'UPDATE events
-                 SET title = :title, event_date = :event_date, status = :status, description = :description,
+                 SET title = :title, event_date = :event_date, description = :description,
                      location = :location, location_icon = :location_icon, sort_order = :sort_order
                  WHERE id = :id'
             );
         } else {
             $stmt = $pdo->prepare(
-                'INSERT INTO events (title, event_date, status, description, location, location_icon, sort_order)
-                 VALUES (:title, :event_date, :status, :description, :location, :location_icon, :sort_order)'
+                'INSERT INTO events (title, event_date, description, location, location_icon, sort_order)
+                 VALUES (:title, :event_date, :description, :location, :location_icon, :sort_order)'
             );
         }
-        $stmt->execute($payload);
+        execute_or_redirect($stmt, $payload, 'admin-dashboard.php#events');
     }
 
     header('Location: admin-dashboard.php#events');
@@ -113,7 +121,7 @@ if ($type === 'project') {
                  VALUES (:title, :description, :tags, :sort_order)'
             );
         }
-        $stmt->execute($payload);
+        execute_or_redirect($stmt, $payload, 'admin-dashboard.php#projects');
     }
 
     header('Location: admin-dashboard.php#projects');
@@ -154,7 +162,7 @@ if ($payload[':name'] !== '' && $payload[':role'] !== '') {
              VALUES (:name, :role, :photo_path, :bio, :sort_order)'
         );
     }
-    $stmt->execute($payload);
+    execute_or_redirect($stmt, $payload, 'admin-dashboard.php#teams');
 }
 
 header('Location: admin-dashboard.php#teams');

@@ -18,11 +18,6 @@ const setValue = (form, name, value = "") => {
     if (field) field.value = value;
 };
 
-const setChecked = (form, name, value) => {
-    const field = form.elements[name];
-    if (field) field.checked = value === "1" || value === 1 || value === true;
-};
-
 document.querySelectorAll("[data-close-modal]").forEach((button) => {
     button.addEventListener("click", closeModals);
 });
@@ -44,12 +39,10 @@ document.querySelectorAll("[data-open-event-modal]").forEach((button) => {
         setValue(form, "id", button.dataset.id || "");
         setValue(form, "title", button.dataset.title || "");
         setValue(form, "event_date", button.dataset.eventDate || "");
-        setValue(form, "status", button.dataset.status || "Upcoming");
         setValue(form, "description", button.dataset.description || "");
         setValue(form, "location", button.dataset.location || "");
         setValue(form, "location_icon", button.dataset.locationIcon || "location_on");
         setValue(form, "sort_order", button.dataset.sortOrder || "0");
-        setChecked(form, "is_visible", button.dataset.mode === "add" ? true : button.dataset.isVisible);
         document.getElementById("event-modal-title").textContent = button.dataset.mode === "add" ? "Add Event" : "Edit Event";
         openModal("event-modal");
     });
@@ -64,7 +57,6 @@ document.querySelectorAll("[data-open-project-modal]").forEach((button) => {
         setValue(form, "description", button.dataset.description || "");
         setValue(form, "tags", button.dataset.tags || "");
         setValue(form, "sort_order", button.dataset.sortOrder || "0");
-        setChecked(form, "is_visible", button.dataset.mode === "add" ? true : button.dataset.isVisible);
         document.getElementById("project-modal-title").textContent = button.dataset.mode === "add" ? "Add Project" : "Edit Project";
         openModal("project-modal");
     });
@@ -82,7 +74,6 @@ document.querySelectorAll("[data-open-team-modal]").forEach((button) => {
         setValue(form, "photo_path", button.dataset.photoPath || "");
         setValue(form, "bio", button.dataset.bio || "");
         setValue(form, "sort_order", button.dataset.sortOrder || "0");
-        setChecked(form, "is_visible", button.dataset.mode === "add" ? true : button.dataset.isVisible);
         document.getElementById("team-modal-title").textContent = button.dataset.mode === "add" ? "Add Team Member" : "Edit Team Member";
         image.src = button.dataset.photoPath || "";
         imageWrap.hidden = !button.dataset.photoPath;

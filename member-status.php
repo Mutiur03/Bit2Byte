@@ -1,8 +1,5 @@
 <?php
 require_once __DIR__ . '/db.php';
-require_once __DIR__ . '/core-data.php';
-
-init_core_data($pdo);
 
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Cache-Control: post-check=0, pre-check=0', false);
@@ -35,11 +32,17 @@ if ($member_id < 1 || !in_array($status, $allowed_statuses, true)) {
     exit;
 }
 
-$stmt = $pdo->prepare('UPDATE members SET status = :status WHERE id = :id');
-$stmt->execute([
-    ':status' => $status,
-    ':id' => $member_id,
-]);
+try {
+    $stmt = $pdo->prepare('UPDATE members SET status = :status WHERE id = :id');
+    $stmt->execute([
+        ':status' => $status,
+        ':id' => $member_id,
+    ]);
+} catch (PDOException $e) {
+    if (!is_missing_table_error($e)) {
+        throw $e;
+    }
+}
 
 header('Location: admin-dashboard.php');
 exit;

@@ -13,6 +13,15 @@ function env_value($key, $default = '') {
     return $_ENV[$key] ?? getenv($key) ?: $default;
 }
 
+function is_missing_table_error(Throwable $e) {
+    if (!$e instanceof PDOException) {
+        return false;
+    }
+
+    $error_info = $e->errorInfo ?? [];
+    return $e->getCode() === '42S02' || (int) ($error_info[1] ?? 0) === 1146;
+}
+
 load_env(__DIR__ . '/.env');
 
 $db_host = env_value('DB_HOST', 'localhost');

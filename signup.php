@@ -1,9 +1,6 @@
 <?php
 require_once __DIR__ . '/db.php';
-require_once __DIR__ . '/core-data.php';
 require_once __DIR__ . '/upload-utils.php';
-
-init_core_data($pdo);
 
 function redirect_with_message($url, $message) {
     header('Location: ' . $url . '?message=' . urlencode($message));
@@ -52,6 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (RuntimeException $e) {
         redirect_with_message('signup.html', $e->getMessage());
     } catch (PDOException $e) {
+        if (is_missing_table_error($e)) {
+            redirect_with_message('signup.html', 'Database tables are missing. Run setup first.');
+        }
+
         if ($e->getCode() === '23000') {
             redirect_with_message('signup.html', 'Email or student ID already registered.');
         }

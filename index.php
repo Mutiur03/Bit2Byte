@@ -2,11 +2,24 @@
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/content-data.php';
 
-init_content_data($pdo);
-
-$events = visible_events($pdo);
-$projects = visible_projects($pdo);
-$team_members = visible_team_members($pdo);
+/*
+|--------------------------------------------------------------------------
+| Optional automatic database setup
+|--------------------------------------------------------------------------
+| Keep this commented out during normal use. If you want the homepage to
+| automatically create missing tables and seed starter data, uncomment this
+| block, load the homepage once, then comment it again.
+|
+| require_once __DIR__ . '/setup-data.php';
+| run_schema_file($pdo);
+| seed_all_data($pdo);
+*/
+// require_once __DIR__ . '/setup-data.php';
+// run_schema_file($pdo);
+// seed_all_data($pdo);
+$events = all_events($pdo);
+$projects = all_projects($pdo);
+$team_members = all_team_members($pdo);
 ?>
 <!doctype html>
 

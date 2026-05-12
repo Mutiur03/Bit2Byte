@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/db.php';
-require_once __DIR__ . '/core-data.php';
 require_once __DIR__ . '/content-data.php';
 
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
@@ -20,11 +19,16 @@ if (empty($_SESSION['admin_id'])) {
     exit;
 }
 
-init_core_data($pdo);
-init_content_data($pdo);
-
-$stmt = $pdo->query('SELECT * FROM members ORDER BY created_at DESC');
-$members = $stmt->fetchAll();
+try {
+    $stmt = $pdo->query('SELECT * FROM members ORDER BY created_at DESC');
+    $members = $stmt->fetchAll();
+} catch (PDOException $e) {
+    if (is_missing_table_error($e)) {
+        $members = [];
+    } else {
+        throw $e;
+    }
+}
 $events = all_events($pdo);
 $projects = all_projects($pdo);
 $team_members = all_team_members($pdo);
@@ -182,7 +186,7 @@ function status_class($status) {
           <div class="admin-section-heading">
             <div>
               <h2 class="admin-section-title">Events</h2>
-              <p class="admin-section-subtitle">Manage homepage event cards, dates, locations, and visibility.</p>
+              <p class="admin-section-subtitle">Manage homepage event cards, dates, locations, and ordering.</p>
             </div>
             <button class="btn btn-primary" type="button" data-open-event-modal data-mode="add">
               Add Event
@@ -211,9 +215,9 @@ function status_class($status) {
                     <td data-label="Location"><?= e($event['location']) ?></td>
                     <td data-label="Actions">
                       <div class="row-actions">
-                        <button class="btn btn-sm btn-outline-info" type="button" >Preview</button>
-                        <button class="btn btn-sm btn-outline-secondary" type="button">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger" type="button">Delete</button>
+                        <button class="btn btn-sm btn-outline-info" type="button" data-open-preview data-title="<?= e($event['title']) ?>" data-kicker="<?= e($event['event_date'] > date('Y-m-d') ? 'Upcoming' : 'Completed') ?>" data-description="<?= e($event['description']) ?>" data-meta="<?= e(($event['event_date'] ? date('M j, Y', strtotime($event['event_date'])) : 'No date') . ' | ' . ($event['location'] ?: 'No location')) ?>">Preview</button>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" data-open-event-modal data-mode="edit" data-id="<?= e($event['id']) ?>" data-title="<?= e($event['title']) ?>" data-event-date="<?= e($event['event_date']) ?>" data-description="<?= e($event['description']) ?>" data-location="<?= e($event['location']) ?>" data-location-icon="<?= e($event['location_icon']) ?>" data-sort-order="<?= e($event['sort_order']) ?>">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger" type="button" data-open-delete data-type="event" data-id="<?= e($event['id']) ?>" data-title="<?= e($event['title']) ?>">Delete</button>
                       </div>
                     </td>
                   </tr>
@@ -332,7 +336,6 @@ function status_class($status) {
           <div class="admin-form-grid">
             <label>Title<input class="form-input" name="title" required /></label>
             <label>Date<input class="form-input" name="event_date" type="date" /></label>
-            <label>Status<input class="form-input" name="status" /></label>
             <label>Location<input class="form-input" name="location" /></label>
             <label>
               Icon
