@@ -87,6 +87,7 @@ redirect_logged_in_admin();
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="assets/css/common.css" />
     <link rel="stylesheet" href="assets/css/auth.css" />
   </head>
   <body class="overflow-auto">
@@ -158,6 +159,7 @@ redirect_logged_in_admin();
                   <button
                     type="button"
                     id="toggle-login-password"
+                    onclick="show_password()"
                     class="btn btn-sm btn-link p-0 position-absolute end-0 top-50 translate-middle-y me-2"
                     tabindex="-1"
                     style="
@@ -201,6 +203,6 @@ redirect_logged_in_admin();
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
-    <script src="login.js"></script>
+    <script src="assets/js/login.js"></script>
   </body>
 </html>

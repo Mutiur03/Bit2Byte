@@ -7,6 +7,7 @@
   --font-headline: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --glow: 0 0 20px rgba(var(--primary-rgb), 0.3);
+  --pattern-rgb: var(--primary-rgb);
 }
 
 * {
@@ -29,18 +30,6 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-}
-
-.grid-pattern {
-  background-image:
-    linear-gradient(to right, rgba(var(--primary-rgb), 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(var(--primary-rgb), 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
-.dot-pattern {
-  background-image: radial-gradient(rgba(var(--primary-rgb), 0.15) 1px, transparent 1px);
-  background-size: 32px 32px;
 }
 
 .glow-spot {
@@ -298,16 +287,6 @@ main {
   color: var(--primary);
 }
 
-.forgot-link {
-  color: rgba(var(--primary-rgb), 0.6);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.forgot-link:hover {
-  color: var(--primary);
-}
-
 .btn-submit {
   position: relative;
   overflow: hidden;
@@ -361,16 +340,6 @@ main {
   text-transform: uppercase;
 }
 
-.policy span {
-  border-bottom: 1px solid rgba(var(--primary-rgb), 0.2);
-  color: rgba(var(--primary-rgb), 0.6);
-  cursor: pointer;
-}
-
-.policy span:hover {
-  color: var(--primary);
-}
-
 .auth-footer {
   margin-top: 2rem;
   color: rgba(var(--on-surface-variant), 0.3);
@@ -378,14 +347,6 @@ main {
   font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-}
-
-.material-symbols-outlined {
-  font-variation-settings:
-    "FILL" 0,
-    "wght" 300,
-    "GRAD" 0,
-    "opsz" 24;
 }
 
 @keyframes float {

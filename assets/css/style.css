@@ -1,27 +1,5 @@
 .material-symbols-outlined {
-    font-variation-settings:
-        "FILL" 0,
-        "wght" 300,
-        "GRAD" 0,
-        "opsz" 24;
     vertical-align: middle;
-}
-
-.grid-pattern {
-    background-image:
-        linear-gradient(to right,
-            rgba(91, 200, 212, 0.05) 1px,
-            transparent 1px),
-        linear-gradient(to bottom,
-            rgba(91, 200, 212, 0.05) 1px,
-            transparent 1px);
-    background-size: 64px 64px;
-}
-
-.dot-pattern {
-    background-image: radial-gradient(rgba(91, 200, 212, 0.15) 1px,
-            transparent 1px);
-    background-size: 32px 32px;
 }
 
 .cursor-blink::after {
@@ -83,7 +61,7 @@
     --soft: #79858b;
     --accent: #79e4f0;
     --accent-ink: #00363b;
-    --warm: #ffc9ad;
+    --pattern-rgb: 91, 200, 212;
     --max-width: 1180px;
 }
 

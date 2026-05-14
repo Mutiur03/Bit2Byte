@@ -36,6 +36,7 @@ $team_members = all_team_members($pdo);
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="assets/css/common.css">
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
   <body>
