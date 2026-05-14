@@ -87,7 +87,7 @@ redirect_logged_in_admin();
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="auth.css" />
+    <link rel="stylesheet" href="assets/css/auth.css" />
   </head>
   <body class="overflow-auto">
     <div class="bg-overlay grid-pattern"></div>
@@ -102,7 +102,7 @@ redirect_logged_in_admin();
         class="brand mb-4 mb-md-5"
         title="Return to Core System"
       >
-        <img src="main-logo.png" alt="Bit2Byte Logo" class="brand-logo" />
+        <img src="assets/main-logo.png" alt="Bit2Byte Logo" class="brand-logo" />
         <h1 class="brand-text">Bit<span>2</span>Byte</h1>
       </a>
 
@@ -118,7 +118,7 @@ redirect_logged_in_admin();
               class="tabs d-flex justify-content-between justify-content-sm-start"
             >
               <a href="login.php" class="tab-btn active">Admin Login</a>
-              <a href="signup.html" class="tab-btn">Member Form</a>
+              <a href="signup.php" class="tab-btn">Member Form</a>
             </div>
 
             <form

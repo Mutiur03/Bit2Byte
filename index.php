@@ -36,13 +36,13 @@ $team_members = all_team_members($pdo);
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
   </head>
   <body>
     <header class="site-header">
       <nav class="site-nav">
         <a href="#home" class="brand-link">
-          <img src="main-logo.png" alt="Bit2Byte Logo" />
+          <img src="assets/main-logo.png" alt="Bit2Byte Logo" />
           <span>Bit2Byte</span>
         </a>
         <div class="nav-links">
@@ -260,7 +260,7 @@ $team_members = all_team_members($pdo);
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-brand">
-          <img src="main-logo.png" alt="Bit2Byte Logo" />
+          <img src="assets/main-logo.png" alt="Bit2Byte Logo" />
           <div>
             <strong>Bit2Byte</strong>
             <span class="footer-copy">&copy; <span id="current-year">2024</span> Bit2Byte Club.</span>
